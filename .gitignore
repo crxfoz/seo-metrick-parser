@@ -1,0 +1,5 @@
+deployment/seo_server
+deployment/seo_server_linux
+deployment/seo_worker
+deployment/seo_worker_linux
+deployment/keys.env

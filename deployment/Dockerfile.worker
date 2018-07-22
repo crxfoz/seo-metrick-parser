@@ -1,0 +1,4 @@
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates tzdata
+COPY ./seo_worker_linux /usr/bin/seo_worker
+ENTRYPOINT ["seo_worker"]

@@ -1,0 +1,181 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: SEO Parser server
+produces:
+  - application/json
+basePath: /api/v1
+consumes:
+  - application/json
+securityDefinitions:
+  ApiKey:
+    type: apiKey
+    in: header
+    name: x-token
+security:
+- ApiKey: []
+paths:
+
+  /parsers:
+    get:
+      security: []
+      operationId: getParsers
+      summary: List of parsers
+      responses:
+        200:
+          description: OK
+          schema:
+              type: array
+              items:
+                $ref: "#/definitions/Parser"
+        502:
+          description: Database is down
+
+  /tasks:
+    get:
+      operationId: getTasks
+      summary: Full list of tasks
+      responses:
+        200:
+          description: OK
+          schema:
+              type: array
+              items:
+                $ref: "#/definitions/Task"
+        502:
+          description: Database is down
+    post:
+      security: []
+      operationId: addTask
+      summary: Creates a new task
+      parameters:
+        - name: body
+          in: body
+          description: The task data to create
+          required: true
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - url
+                - parsers
+              properties:
+                url:
+                  type: string
+                parsers:
+                  description: Names of the parsers we should use for this URL
+                  type: array
+                  items:
+                    type: string
+      responses:
+        201:
+          description: Task created
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: Message from backend
+              id:
+                type: integer
+                description: ID of the created task
+
+        422:
+          description: Invalid request data
+        502:
+          description: Database is down
+
+  /tasks/{id}:
+    get:
+      security: []
+      operationId: getTaskStatus
+      summary: Get status of the task
+      parameters:
+        - $ref: "#/parameters/TaskID"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Task"
+        404:
+          description: Task id not found
+        502:
+          description: database is down
+
+  /tasks/{id}/data:
+    get:
+      security: []
+      operationId: getTaskData
+      summary: Get results of the work
+      parameters:
+        - $ref: "#/parameters/TaskID"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/UrlResult"
+        404:
+          description: Task id not found
+        502:
+          description: database is down
+
+parameters:
+  TaskID:
+    name: id
+    description: The ID of the Task
+    type: integer
+    in: path
+    required: true
+
+definitions:
+  AuthToken:
+    type: string
+
+  Parser:
+    title: Parser
+    description: representation of Parser
+    type: object
+    required:
+      - name
+      - description
+    properties:
+      name:
+        type: string
+#        $ref: '#/definitions/ParserName'
+      description:
+        title: Description of the parser
+        type: string
+
+  Task:
+    title: Task
+    type: object
+    properties:
+      id:
+        type: integer
+      status:
+        description: A current status of the task
+        type: string
+        enum: ["done", "runned", "waiting", "failed"]
+      created_at:
+        type: string
+        format: 'date-time'
+      started_at:
+        type: string
+        format: 'date-time'
+      finished_at:
+        type: string
+        format: 'date-time'
+
+
+  UrlResult:
+    title: URL Result
+    description: results of the url from task
+    type: object
+    properties:
+      url:
+        type: string
+      data:
+        type: object

@@ -1,0 +1,16 @@
+version: '3'
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    env_file:
+      - worker.env
+      - keys.env
+    environment:
+      TZ: Europe/Moscow
+      RD_HOST: queue
+      PG_HOST: database
+    links:
+      - "queue:queue"
+      - "db:database"

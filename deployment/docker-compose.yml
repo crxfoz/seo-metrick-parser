@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    env_file:
+      - worker.env
+    environment:
+      TZ: Europe/Moscow
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./scheme.sql:/docker-entrypoint-initdb.d/init.sql"
+  queue:
+    image: redis
+    environment:
+      TZ: Europe/Moscow
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    env_file:
+      - worker.env
+    environment:
+      TZ: Europe/Moscow
+      RD_HOST: queue
+      PG_HOST: database
+      API_SERVER_HOST: 0.0.0.0
+      API_SERVER_PORT: 8080
+    ports:
+      - "80:8080"
+    links:
+      - "db:database"
+      - "queue:queue"
