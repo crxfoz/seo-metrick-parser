@@ -33,11 +33,3 @@ clean:
 	rm -f $(DEPLOY_DIR)/$(BINARY_NAME_WORKER)
 	rm -f $(DEPLOY_DIR)/$(BINARY_NAME_LINUX_SERVER)
 	rm -f $(DEPLOY_DIR)/$(BINARY_NAME_LINUX_WORKER)
-
-test:
-	docker run --rm -p 5432:5432 -d --name seo_parser_postgres_test -e POSTGRES_DB=seo_parser_test postgres
-	docker run --rm -p 6379:6379 -d --name seo_parser_redis_test redis
-	usql -f ./deployment/scheme.sql "pg://postgres@localhost:5432/seo_parser_test?sslmode=disable"
-	GOCACHE=off go test -v ./...
-	docker stop seo_parser_postgres_test
-	docker stop seo_parser_redis_test
