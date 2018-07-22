@@ -4,7 +4,7 @@ Example project
 #### Build API server:
 ```bash
 # Clone the repo
-git clone http
+git clone https://github.com/crxfoz/seo-metrick-parser.git
 make run-server
 
 # or manually
@@ -24,7 +24,7 @@ docker-compose up
 If you would like to run api server and worker at the same host use: `make run`.
 Otherwise you have to setup `worker.env` file or setup a network between containers.
 ```bash
-git clone http://
+git clone https://github.com/crxfoz/seo-metrick-parser.git
 
 make build-linux
 # or
