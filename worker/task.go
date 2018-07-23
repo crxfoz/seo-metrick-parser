@@ -11,7 +11,7 @@ func NewTask(data []UrlConfig) *Task {
 
 // Run runs a sheduler.
 // Iterates over all urls in Task and puts it in worker
-func (t *Task) Run(workers WorkerPoolService) Reporter {
+func (t *Task) Run(workers *WorkerPool) Reporter {
 	result := make(Reporter)
 
 	for _, u := range t.data {

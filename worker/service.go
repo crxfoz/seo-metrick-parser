@@ -6,5 +6,5 @@ import (
 
 type ParserService struct {
 	Parser parsers.Parser `json:"parser"`
-	Worker WorkerService  `json:"-"`
+	Worker *Worker        `json:"-"`
 }

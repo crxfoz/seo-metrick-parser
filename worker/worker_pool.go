@@ -4,13 +4,6 @@ import (
 	"github.com/crxfoz/seo_metrick_parser/parsers"
 )
 
-// var workerPoolHandler *WorkerPool
-
-type WorkerPoolService interface {
-	Map(func(string, *ParserService))
-	Add(parsers.Parser, WorkerService)
-}
-
 // WorkerPool stores the map of *ParserService
 type WorkerPool struct {
 	data map[string]*ParserService
@@ -28,7 +21,7 @@ func (l *WorkerPool) Map(fn func(index string, info *ParserService)) {
 }
 
 // Add adds a Parser into Reposity.
-func (l *WorkerPool) Add(svc parsers.Parser, worker WorkerService) {
+func (l *WorkerPool) Add(svc parsers.Parser, worker *Worker) {
 	p := &ParserService{Parser: svc}
 	l.data[svc.Name] = p
 	l.data[svc.Name].Worker = worker

@@ -7,12 +7,6 @@ import (
 	"time"
 )
 
-type WorkerService interface {
-	AddWorkAsync(string)
-	GetResult() interface{}
-	RunBackground(timeout time.Duration)
-}
-
 // Worker for every parser we have
 type Worker struct {
 	isStopped bool
